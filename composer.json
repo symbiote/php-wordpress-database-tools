@@ -14,10 +14,6 @@
     "autoload": {
         "classmap": [
             "src/"
-        ],
-        "psr-0": {
-            "ForceUTF8\\": "thirdparty/forceutf8/src/"
-        },
-        "files": ["thirdparty/wordpress/wp-includes/formatting.php"]
+        ]
     }
 }

@@ -2,7 +2,11 @@
 
 class WordpressFilter {
 	public function __construct() {
-		include_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'thirdparty'.DIRECTORY_SEPARATOR.'wordpress'.DIRECTORY_SEPARATOR.'wp-includes'.DIRECTORY_SEPARATOR.'formatting.php');
+		$THIRDPARTY_DIR = dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'thirdparty'.DIRECTORY_SEPARATOR;
+		// Include Wordpress formatting
+		include_once($THIRDPARTY_DIR.'wordpress'.DIRECTORY_SEPARATOR.'wp-includes'.DIRECTORY_SEPARATOR.'formatting.php');
+		// Include ForceUTF8 formatting
+		include_once($THIRDPARTY_DIR.'forceutf8'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'ForceUTF8'.DIRECTORY_SEPARATOR.'Encoding.php');
 	}
 
 	public function post_title($value) {
