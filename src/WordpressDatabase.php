@@ -104,6 +104,57 @@ class WordpressDatabase {
 		return $result;
 	}
 
+	/**
+	 * Get all terms that exist in a taxonomy type. To determine what taxonomy types are available, call 'getTermTypes' and use
+	 * one of the names provided.
+	 *
+	 * @return array
+	 */
+	public function getTerms($taxonomy) {
+		static $table = 'terms';
+		$this->_init();
+		$taxonomy = $this->_db->real_escape_string($taxonomy);
+		$termIds = $this->_query('SELECT term_taxonomy_id FROM '.$this->getTable('term_taxonomy').' WHERE taxonomy = \''.$taxonomy.'\'', 'term_taxonomy_id', true);
+		$result = $this->_query('SELECT * FROM '.$this->getTable($table).' WHERE term_id IN ('.implode(',', $termIds).')', 'term_id');
+		foreach ($result as &$item) {
+			$item[self::HINT]['table'] = $table;
+			unset($item);
+		}
+		return $result;
+	}
+
+	/**
+	 * Return a key-value store, where the key is the Wordpress page/post ID from the 'wp_posts' table.
+	 * and the value is an array of the term IDs that page/post is using.
+	 *
+	 * e.g. $this->getTermRelationships($this->getTerms('category'));
+	 *
+	 * @return array
+	 */
+	public function getTermRelationships($terms) {
+		static $table = 'term_relationships';
+		if (!$terms) {
+			return array();
+		}
+		$termIds = array_keys($terms);
+		$termRelationships = $this->_query('SELECT * FROM '.$this->getTable($table).' WHERE term_taxonomy_id IN ('.implode(',', $termIds).')');
+		$result = array();
+		foreach ($termRelationships as $item) {
+			$key = $item['object_id'];
+			$value = $item['term_taxonomy_id'];
+			if (!isset($result[$key])) {
+				$result[$key] = array();
+			}
+			$result[$key][] = $value;
+		}
+		return $result;
+	}
+
+	public function getTermTypes() {
+		$result = $this->_query('SELECT DISTINCT taxonomy FROM '.$this->getTable('term_taxonomy'), 'taxonomy', true);
+		return $result;
+	}
+
 	public function getPostTypes() {
 		$result = $this->_query('SELECT DISTINCT post_type FROM '.$this->getTable('posts'), 'post_type', true);
 		return $result;
