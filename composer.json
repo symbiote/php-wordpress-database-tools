@@ -2,7 +2,7 @@
     "name": "silbinarywolf/php-wordpress-database-tools",
     "description": "A set of classes for connecting to a Wordpress database and querying it. The point of this library is to easily and effeciently iterate over Wordpress data and import into other CMS systems.",
     "keywords": ["wordpress"],
-	"license": "BSD-3-Clause",
+    "license": "BSD-3-Clause",
     "authors": [
     {
         "name": "Jake Bentvelzen",
@@ -14,6 +14,10 @@
     "autoload": {
         "classmap": [
             "src/"
-        ]
+        ],
+        "psr-0": {
+            "ForceUTF8\\": "thirdparty/forceutf8/src/"
+        },
+        "files": ["thirdparty/wordpress/wp-includes/formatting.php"]
     }
 }
